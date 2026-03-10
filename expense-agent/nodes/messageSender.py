@@ -18,14 +18,14 @@ You should take into account the sql query that was generated.
 The amount should be formatted with 2 decimal places and the euro symbol, for example: "20.00 €".
 
 The message should be concise and short, ideally one or two sentences at most.
-User request:
-{state["message"]}
-SQL query result:
-{state["result"]}
-User intent:
-{state["user_intent"]}
-SQL query:
-{state["sql_query"]}
+
+User request: {state["message"]}
+state result: {state["result"]}
+User intent: {state["user_intent"]}
+SQL query: {state["sql_query"]}
+
+According to SQL query result, generate a message to the user.
+Don't forget that state result can be "Query executed successfully", which means that the user intent has been fulfilled. In this case, you should generate a message confirming that the expense has been added or the request has been fulfilled.
 """  
     response = client.chat.completions.create(
     model="gpt-5",
