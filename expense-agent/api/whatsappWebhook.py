@@ -2,6 +2,7 @@ from fastapi import FastAPI, Form
 from fastapi.responses import Response
 from graph import graph
 from db.init_db import init_db
+from nodes.twilioSender import send_whatsapp
 
 app = FastAPI()
 
@@ -26,10 +27,5 @@ async def whatsapp_webhook(Body: str = Form(...), From: str = Form(...)):
 
     result = graph.invoke(state)
 
-    response = f"""
-<Response>
-<Message>{result['response_message']}</Message>
-</Response>
-"""
-
-    return Response(content=response, media_type="application/xml")
+    # Send the response back to the user via WhatsApp
+    send_whatsapp(From, result["response_message"])
