@@ -1,6 +1,7 @@
 from graph import graph
+from db.init_db import init_db
 
-
+init_db()
 if __name__ == "__main__":
 
     print("Expense agent ready")
@@ -12,6 +13,8 @@ if __name__ == "__main__":
         if message == "exit":
             break
 
-        graph.invoke({
+        result = graph.invoke({
             "message": message
         })
+        
+        print(result["response_message"])

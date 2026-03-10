@@ -5,8 +5,10 @@ class AgentState(TypedDict):
 
     message: str
 
-    next_node: str | None
+    sql_query: str | None
 
-    amount: float | None
-    category: str | None
-    description: str | None
+    result: list | None
+
+    response_message: str | None
+
+    user_intent: str | None

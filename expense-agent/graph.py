@@ -1,44 +1,26 @@
 from langgraph.graph import StateGraph, END
 
 from agentState import AgentState
-from router import router_node
-from nodes import (
-    parse_expense,
-    add_expense,
-    get_month_total,
-    get_summary
-)
+from nodes.sqlGenerator import generate_sql
+from nodes.sqlExecutor import execute_sql
+from nodes.messageSender import send_message
+from nodes.getUserIntent import get_user_intent
 
 
 workflow = StateGraph(AgentState)
 
-workflow.add_node("router", router_node)
+workflow.add_node("get_user_intent", get_user_intent)
+workflow.add_node("generate_sql", generate_sql)
+workflow.add_node("execute_sql", execute_sql)
+workflow.add_node("send_message", send_message)
 
-workflow.add_node("parse_expense", parse_expense)
-workflow.add_node("add_expense", add_expense)
+workflow.set_entry_point("get_user_intent")
 
-workflow.add_node("get_month_total", get_month_total)
-workflow.add_node("get_summary", get_summary)
+workflow.add_edge("get_user_intent", "generate_sql")
+workflow.add_edge("generate_sql", "execute_sql")
 
+workflow.add_edge("execute_sql", "send_message")
 
-workflow.set_entry_point("router")
-
-
-def route(state: AgentState):
-
-    return state["next_node"]
-
-
-workflow.add_conditional_edges(
-    "router",
-    route
-)
-
-
-workflow.add_edge("parse_expense", "add_expense")
-
-workflow.add_edge("add_expense", END)
-workflow.add_edge("get_month_total", END)
-workflow.add_edge("get_summary", END)
+workflow.add_edge("send_message", END)
 
 graph = workflow.compile()

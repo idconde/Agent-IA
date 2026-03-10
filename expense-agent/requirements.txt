@@ -7,3 +7,6 @@ openai
 langgraph
 langchain-openai
 python-dotenv
+psycopg2-binary
+twilio
+psycopg2
